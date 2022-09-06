@@ -166,6 +166,3 @@ def whoIsOnline():
         return f"""The following team members are online: \n{result}"""
     else:
         return f""" Nobody online\n"""
-
-#print(addDataOut("123","user name","user"))
-#calculate_totalTime()
