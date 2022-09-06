@@ -40,7 +40,11 @@ def dayHours(update, context):
 def weekHours(update, context):
     response =str(stats.calculateWeekHours())
     update.message.reply_text(response)
-        
+
+def dailyreport(update, context):
+    response =str(stats.dailyReport())
+    update.message.reply_text(response)
+
 
 if __name__ == '__main__':
     updater = Updater(token=token, use_context=True)
@@ -49,12 +53,10 @@ if __name__ == '__main__':
     dispatcher.add_handler(CommandHandler('start', start))
     dispatcher.add_handler(CommandHandler('dayhours', dayHours))
     dispatcher.add_handler(CommandHandler('weekhours', weekHours))
+    dispatcher.add_handler(CommandHandler('dailyreport', dailyreport))
     dispatcher.add_handler(MessageHandler(filters=Filters.text, callback= process_messages))
     dispatcher.add_handler(MessageHandler(filters=Filters.caption, callback= process_messages))
     updater.start_polling()
     
     print('Bot started')
     updater.idle()
-
-
-
