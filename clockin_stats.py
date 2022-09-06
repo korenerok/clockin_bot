@@ -1,6 +1,8 @@
 from datetime import datetime, timedelta, date, time
+from unittest import result
 import mysql.connector
 from configparser import ConfigParser
+from functools import reduce
 
 config = ConfigParser().read("./.env")
 dbSettings = config['CONECTIONS']
@@ -151,6 +153,19 @@ def dailyReport():
     formattedTime = '%02d:%02d:%02d' % (total_time.days*24 + total_time.seconds // 3600, (total_time.seconds % 3600) // 60, total_time.seconds % 60)
     result += f"""Today the team has worked a total of (hh:mm:ss) {formattedTime}.""" 
     return result
+
+def whoIsOnline():
+    connection=mysql_connect()
+    if connection is None:
+        return f"""Error with the database, please check database settings"""
+    cursor = connection.cursor()
+    cursor.execute("SELECT name FROM clockins where out_time IS NULL ORDER BY name ASC")
+    activeUsers = [f"{x[0]}.\n" for x in cursor.fetchall()]
+    result = reduce(lambda x,y: x+""+y,activeUsers,"")
+    if len(result)>0:
+        return f"""The following team members are online: \n{result}"""
+    else:
+        return f""" Nobody online\n"""
 
 #print(addDataOut("123","user name","user"))
 #calculate_totalTime()
